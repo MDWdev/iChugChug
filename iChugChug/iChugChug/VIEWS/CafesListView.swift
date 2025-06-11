@@ -16,13 +16,7 @@ struct CafesListView: View {
             Button {
                 path.append(cafe)
             } label: {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(cafe.name)
-                        .font(.headline)
-                    Text(cafe.streetAddress)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                }
+                CafeRowView(cafe: cafe)
             }
         }
     }

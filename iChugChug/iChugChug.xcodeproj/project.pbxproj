@@ -24,6 +24,7 @@
 		96E2B8A92DF74D3D00C53CEC /* cafes.json in Resources */ = {isa = PBXBuildFile; fileRef = 96E2B8A82DF74D3D00C53CEC /* cafes.json */; };
 		96E2B8AB2DF7618B00C53CEC /* CafeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E2B8AA2DF7618B00C53CEC /* CafeDetailView.swift */; };
 		96E2B8B12DF76E8600C53CEC /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E2B8B02DF76E8600C53CEC /* Helpers.swift */; };
+		96E2B8B32DF9EB5300C53CEC /* CafeRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96E2B8B22DF9EB5300C53CEC /* CafeRowView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +66,7 @@
 		96E2B8A82DF74D3D00C53CEC /* cafes.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = cafes.json; sourceTree = "<group>"; };
 		96E2B8AA2DF7618B00C53CEC /* CafeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CafeDetailView.swift; sourceTree = "<group>"; };
 		96E2B8B02DF76E8600C53CEC /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		96E2B8B22DF9EB5300C53CEC /* CafeRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CafeRowView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +189,7 @@
 				96E2B8A32DF732E200C53CEC /* CafesListView.swift */,
 				96E2B8A52DF7376B00C53CEC /* CafesMapView.swift */,
 				96E2B8AA2DF7618B00C53CEC /* CafeDetailView.swift */,
+				96E2B8B22DF9EB5300C53CEC /* CafeRowView.swift */,
 			);
 			path = VIEWS;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 			files = (
 				96E2B8992DF353BF00C53CEC /* Cafe.swift in Sources */,
 				96E2B8A42DF732E200C53CEC /* CafesListView.swift in Sources */,
+				96E2B8B32DF9EB5300C53CEC /* CafeRowView.swift in Sources */,
 				96E2B89D2DF3585700C53CEC /* HomeViewModel.swift in Sources */,
 				96E2B8AB2DF7618B00C53CEC /* CafeDetailView.swift in Sources */,
 				96E2B8B12DF76E8600C53CEC /* Helpers.swift in Sources */,

@@ -23,6 +23,11 @@ struct Cafe: Codable, Identifiable, Hashable {
     let goodFor: String
     let openTime: String
     let closeTime: String
+    let imageName: String
+    
+    var imageURL: URL? {
+        URL(string: "https://github.com/MDWdev/iChugChug/blob/main/OnlineAssets/\(imageName)?raw=true")
+    }
 }
 
 struct CafeResponse: Codable {
@@ -42,7 +47,9 @@ let fakeCafesExample = [
          description: "Modern cafe with locally roasted coffee and comfy seating.",
          goodFor: "Remote Work",
          openTime: "7:00 AM",
-         closeTime: "9:00 PM"),
+         closeTime: "9:00 PM",
+         imageName: "coffee1.jpg"
+        ),
     Cafe(name: "Roasting Plant Coffee",
          category: "Espresso Bar",
          latitude: 42.355161,
@@ -55,5 +62,7 @@ let fakeCafesExample = [
          description: "High-tech coffee bar with custom brews made to order.",
          goodFor: "Espresso, Pastries",
          openTime: "6:30 AM",
-         closeTime: "8:00 PM")
+         closeTime: "8:00 PM",
+         imageName: "coffee2.jpg"
+        )
 ]
