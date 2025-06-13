@@ -7,9 +7,11 @@
 
 import Foundation
 import CoreLocation
+import Combine
 
 
 final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
+    static let shared = LocationManager()
     private let manager = CLLocationManager()
     
     @Published var userLocation: CLLocation?
@@ -18,8 +20,7 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
     override init() {
         super.init()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        manager.distanceFilter = 100  // Only update every ~100m
+        manager.desiredAccuracy = kCLLocationAccuracyBest
         manager.requestWhenInUseAuthorization()
         manager.startUpdatingLocation()
     }
@@ -28,10 +29,7 @@ final class LocationManager: NSObject, ObservableObject, CLLocationManagerDelega
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         DispatchQueue.main.async {
-            self.userLocation = locations.first
-            if let loc = self.userLocation {
-                print("Updated location: \(loc.coordinate.latitude), \(loc.coordinate.longitude)")
-            }
+            self.userLocation = locations.last
         }
     }
 

@@ -58,3 +58,9 @@ struct Triangle: Shape {
         }
     }
 }
+
+extension String {
+    func onlyDigits() -> String {
+        return self.filter("0123456789".contains)
+    }
+}

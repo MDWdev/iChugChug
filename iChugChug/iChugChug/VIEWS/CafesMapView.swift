@@ -12,7 +12,7 @@ struct CafesMapView: View {
     let cafes: [Cafe]
     @State private var selectedCafe: Cafe?
     @State private var region: MKCoordinateRegion
-    @State private var userLocation: CLLocation?
+    @StateObject private var locationManager = LocationManager.shared
     @Binding var path: NavigationPath
 
     init(cafes: [Cafe], path: Binding<NavigationPath>) {
@@ -41,7 +41,7 @@ struct CafesMapView: View {
                                 .font(.caption)
                                 .bold()
 
-                            if let userLoc = userLocation {
+                            if let userLoc = locationManager.userLocation {
                                 let cafeLoc = CLLocation(latitude: cafe.latitude, longitude: cafe.longitude)
                                 let distance = cafeLoc.distance(from: userLoc) / 1609.34 // meters → miles
                                 Text(String(format: "%.1f miles away", distance))

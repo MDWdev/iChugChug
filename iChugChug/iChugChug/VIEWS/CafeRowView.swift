@@ -6,9 +6,12 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct CafeRowView: View {
     let cafe: Cafe
+    
+    @StateObject private var locationManager = LocationManager.shared
 
     var body: some View {
         HStack {
@@ -36,8 +39,16 @@ struct CafeRowView: View {
             }
 
             VStack(alignment: .leading) {
-                Text(cafe.name)
-                    .font(.headline)
+                HStack(spacing: 4) {
+                    Text(cafe.name)
+                        .font(.headline)
+                    
+                    if let distance = distanceText() {
+                        Text("(\(distance))")
+                            .font(.caption)
+                            .foregroundColor(.detail)
+                    }
+                }
                 Text("\(cafe.streetAddress) \(cafe.city), \(cafe.state) \(cafe.postalCode)")
                     .font(.body)
                     .foregroundColor(.detail)
@@ -55,6 +66,13 @@ struct CafeRowView: View {
             }
             .padding(.leading, 8)
         }
+    }
+    
+    private func distanceText() -> String? {
+        guard let userLocation = locationManager.userLocation else { return nil }
+        let cafeLocation = CLLocation(latitude: cafe.latitude, longitude: cafe.longitude)
+        let distanceInMiles = cafeLocation.distance(from: userLocation) / 1609.34
+        return String(format: "%.1f mi", distanceInMiles)
     }
 }
 

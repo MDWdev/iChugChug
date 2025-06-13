@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreLocation
+import Combine
 
 @MainActor
 class HomeViewModel: ObservableObject {
@@ -14,18 +15,27 @@ class HomeViewModel: ObservableObject {
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
     
-    private let locationManager = LocationManager()
+    private let locationManager = LocationManager.shared
     private let apiService = APIService.shared
     private let networkMonitor = NetworkMonitor.shared
+    private var hasSortedByLocation = false
     
     init() {
         Task {
             await loadCafes()
+            
+            locationManager.$userLocation
+                .compactMap { $0 }
+                .first()
+                .sink { [weak self] location in
+                    Task { await self?.sortByLocation(location) }
+                }
+                .store(in: &cancellables)
         }
     }
 
     func loadCafes() async {
-        guard networkMonitor.isConnected else {
+        guard NetworkMonitor.shared.isConnected else {
             errorMessage = "No internet connection."
             return
         }
@@ -34,13 +44,7 @@ class HomeViewModel: ObservableObject {
 
         do {
             let allCafes = try await apiService.fetchCafes()
-            
-            if let userLocation = locationManager.userLocation {
-                cafes = sortByDistance(from: userLocation, cafes: allCafes)
-            } else {
-                cafes = allCafes
-            }
-
+            self.cafes = allCafes
             errorMessage = nil
         } catch {
             errorMessage = "Failed to load cafes."
@@ -50,11 +54,15 @@ class HomeViewModel: ObservableObject {
         isLoading = false
     }
 
-    private func sortByDistance(from location: CLLocation, cafes: [Cafe]) -> [Cafe] {
-        return cafes.sorted {
+    func sortByLocation(_ location: CLLocation) async {
+        guard !hasSortedByLocation else { return }
+        self.cafes = cafes.sorted {
             let loc1 = CLLocation(latitude: $0.latitude, longitude: $0.longitude)
             let loc2 = CLLocation(latitude: $1.latitude, longitude: $1.longitude)
             return loc1.distance(from: location) < loc2.distance(from: location)
         }
+        hasSortedByLocation = true
     }
+
+    private var cancellables = Set<AnyCancellable>()
 }
