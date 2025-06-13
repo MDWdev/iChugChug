@@ -12,6 +12,7 @@ struct CafesMapView: View {
     let cafes: [Cafe]
     @State private var selectedCafe: Cafe?
     @State private var region: MKCoordinateRegion
+    @State private var userLocation: CLLocation?
     @Binding var path: NavigationPath
 
     init(cafes: [Cafe], path: Binding<NavigationPath>) {
@@ -32,18 +33,63 @@ struct CafesMapView: View {
     var body: some View {
         Map(coordinateRegion: $region, annotationItems: cafes) { cafe in
             MapAnnotation(coordinate: CLLocationCoordinate2D(latitude: cafe.latitude, longitude: cafe.longitude)) {
-                Button(action: {
-                    DispatchQueue.main.async {
-                        path.append(cafe)
+                VStack(spacing: 4) {
+                    // Custom callout when selected
+                    if selectedCafe == cafe {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(cafe.name)
+                                .font(.caption)
+                                .bold()
+
+                            if let userLoc = userLocation {
+                                let cafeLoc = CLLocation(latitude: cafe.latitude, longitude: cafe.longitude)
+                                let distance = cafeLoc.distance(from: userLoc) / 1609.34 // meters → miles
+                                Text(String(format: "%.1f miles away", distance))
+                                    .font(.caption2)
+                                    .foregroundColor(.secondary)
+                            }
+
+                            Button {
+                                path.append(cafe)
+                                selectedCafe = nil
+                            } label: {
+                                HStack(spacing: 4) {
+                                    Text("Details")
+                                        .font(.caption2)
+                                    Image(systemName: "chevron.right")
+                                        .font(.caption2)
+                                }
+                            }
+                            .buttonStyle(.borderedProminent)
+                            .tint(.accentColor)
+                        }
+                        .padding(8)
+                        .background(.thinMaterial)
+                        .cornerRadius(10)
+                        .shadow(radius: 3)
                     }
-                }) {
-                    Image(systemName: "mappin.circle.fill")
-                        .resizable()
-                        .frame(width: 30, height: 30)
-                        .foregroundColor(.accentColor)
+
+                    // Always-visible pin
+                    Button {
+                        selectedCafe = cafe
+                    } label: {
+                        VStack(spacing: 0) {
+                            Image(systemName: "cup.and.saucer.fill")
+                                .foregroundColor(.white)
+                                .padding(8)
+                                .background(Circle().fill(Color.accentColor))
+                                .overlay(Circle().stroke(Color.white, lineWidth: 2))
+
+                            Triangle()
+                                .fill(Color.accentColor)
+                                .frame(width: 12, height: 6)
+                                .rotationEffect(.degrees(180))
+                        }
+                    }
+                    .buttonStyle(.plain)
                 }
-                .buttonStyle(.plain)
             }
+
         }
         .navigationTitle("Cafe Map")
         .edgesIgnoringSafeArea(.all)

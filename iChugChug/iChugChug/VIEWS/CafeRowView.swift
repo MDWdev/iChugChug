@@ -47,6 +47,7 @@ struct CafeRowView: View {
                 HStack(spacing: 8) {
                     ForEach(tags, id: \.self) { tag in
                         Image(systemName: symbolForTag(tag))
+                            .accessibilityLabel(Text(tag))
                             .foregroundColor(.accentColor)
                             .imageScale(.medium)
                     }

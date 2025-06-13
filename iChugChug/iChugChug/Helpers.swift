@@ -38,12 +38,23 @@ func symbolForTag(_ tag: String) -> String {
     case "comfy seating":
         return "chair.lounge.fill"
     case "sensory friendly":
-        return "airpods.max"
+        return "headphones"
     case "natural light":
         return "sun.max.fill"
     case "pastries":
         return "fork.knife.circle.fill"
     default:
         return "questionmark.circle"
+    }
+}
+
+struct Triangle: Shape {
+    func path(in rect: CGRect) -> Path {
+        Path { path in
+            path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+            path.closeSubpath()
+        }
     }
 }
